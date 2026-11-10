@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ours-agent-runtime"
+version = "0.1.0"
+description = "Domain-independent agent runtime with goals, plans and intentions"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["agent_runtime", "agent_runtime.*"]
