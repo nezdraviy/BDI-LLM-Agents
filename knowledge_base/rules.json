@@ -1,0 +1,17 @@
+[
+  {
+    "id": "DEMO-001",
+    "title": "Request missing input data",
+    "content": "If required model input is missing, request it instead of inventing engineering values.",
+    "category": "workflow",
+    "tags": [
+      "missing data",
+      "validation"
+    ],
+    "status": "approved",
+    "source": "MVP demo rule; not an engineering standard",
+    "applicable_task_types": [
+      "resolve_knowledge_gap"
+    ]
+  }
+]

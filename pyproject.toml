@@ -1,0 +1,20 @@
+[project]
+name = "bdi-llm"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Dmitriy Kuznetsov", email = "dimawinflo@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "pydantic>=2.14.3",
+    "pytest>=9.2.0",
+]
+
+[project.scripts]
+bdi-llm = "bdi_llm:main"
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
