@@ -8,3 +8,6 @@ htmlcov/
 build/
 dist/
 *.egg-info/
+data_bench/out/
+geo_bench/out/
+reports/
