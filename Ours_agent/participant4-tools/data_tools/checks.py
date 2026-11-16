@@ -24,7 +24,9 @@ SEVERITY = {
     "required_field_missing": "error",
     "value_out_of_range": "error",
     "non_numeric_value": "error",
+    "non_finite_value": "error",
     "empty_curve": "warning",
+    "empty_depth": "error",
     "depth_not_monotonic": "error",
     "depth_range_mismatch": "warning",
 }
@@ -40,13 +42,14 @@ def _number(value):
     if value is None:
         return None
     if isinstance(value, (int, float)):
-        return float(value)
-    text = str(value).strip()
-    if not text:
-        return None
-    v = float(text.replace(",", "."))
+        v = float(value)
+    else:
+        text = str(value).strip()
+        if not text:
+            return None
+        v = float(text.replace(",", "."))
     if not isfinite(v):
-        raise ValueError(text)
+        raise ValueError(f"non-finite numeric value: {value!r}")
     return v
 
 
@@ -62,8 +65,20 @@ def check_empty(t: Table) -> list[dict]:
     out = []
     depth = depth_field(t)
     for key, values in t.columns.items():
-        if key != depth and all(v is None or (isinstance(v, str) and not v.strip()) for v in values):
-            out.append(finding(t.path, "empty_curve", f"Field {key} has no values (all null/empty)"))
+        if all(v is None or (isinstance(v, str) and not v.strip()) for v in values):
+            check_id = "empty_depth" if key == depth else "empty_curve"
+            out.append(finding(t.path, check_id, f"Field {key} has no values (all null/empty)"))
+    return out
+
+
+def check_finite(t: Table) -> list[dict]:
+    """Reject non-finite numeric values independently of project-specific ranges."""
+    out = []
+    for name, values in t.columns.items():
+        bad = sum(isinstance(v, (int, float)) and not isfinite(v) for v in values)
+        if bad:
+            out.append(finding(t.path, "non_finite_value",
+                               f"{name}: {bad} non-finite numeric value(s)"))
     return out
 
 
@@ -128,7 +143,7 @@ def check_depth(t: Table) -> list[dict]:
 def validate_table(t: Table, required: tuple[str, ...], ranges: dict[str, tuple]) -> list[dict]:
     out = check_required(t, required) + check_empty(t)
     if t.row_count:
-        out += check_ranges(t, ranges) + check_depth(t)
+        out += check_finite(t) + check_ranges(t, ranges) + check_depth(t)
     return out
 
 

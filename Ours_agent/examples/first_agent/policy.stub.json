@@ -1,0 +1,5 @@
+{
+  "accepted_formats": ["las", "csv"],
+  "required_fields_by_format": {},
+  "numeric_ranges": {}
+}

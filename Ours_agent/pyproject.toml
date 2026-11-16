@@ -10,6 +10,12 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["agent_runtime", "agent_runtime.*"]
+[project.scripts]
+first-data-agent = "first_agent.cli:main"
+
+[tool.setuptools]
+packages = ["agent_runtime", "first_agent", "data_tools"]
+py-modules = ["data_validation_profile"]
+
+[tool.setuptools.package-dir]
+data_tools = "participant4-tools/data_tools"
